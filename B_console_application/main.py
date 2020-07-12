@@ -68,20 +68,33 @@ class Student:
         for each_std in data:
             if (each_std["std_name"] == std_name):
                 print(
-                    f"Student Detail::\nName:{each_std.get('std_name')}\nAge:{each_std.get('std_age')}\nCourse:{each_std.get('std_course')}\nDeposit Status:{each_std.get('std_deposit_status')}\nRemaining:{each_std.get('std_deposit_amount_remaining')}\Paid:{each_std.get('std_paid_amount')}")
+                    f"Student Detail::\nName:{each_std.get('std_name')}\nAge:{each_std.get('std_age')}\nCourse:{each_std.get('std_course')}\nDeposit Status:{each_std.get('std_deposit_status')}\nRemaining:{each_std.get('std_deposit_amount_remaining')}\nPaid:{each_std.get('std_paid_amount')}")
             else:
                 print("Student with that name is not available in our records.")
 
     def view_all_payment_details(self):
-        pass
+        with open(self.std_path+'/csvs/students.csv', 'r') as std_file:
+            readdata = dict(csv.DictReader(std_file))
+
+            for eachdata in readdata:
+                print(
+                    f"Name: {eachdata['std_name']}\tDeposit Status:{eachdata.get('std_deposit_status')}\tRemaining:{eachdata.get('std_deposit_amount_remaining')}\tPaid:{eachdata.get('std_paid_amount')}")
 
     def update_student_details(self, std_name):
-        pass
+        with open(self.std_path+'/csvs/students.csv', 'r') as std_file:
+            readdata = dict(csv.DictReader(std_file))
+            # print(dict(readdata))
+            for eachdata in readdata:
+                if (readdata.get('std_name') != std_name):
+                    with open(self.std_path+'/csvs/students.csv', 'w') as std_file:
+                        writer = csv.DictWriter(
+                            std_file, fieldnames=self.std_field_names)
+                        writer.writerow(eachdata)
 
     def leave_program(self, std_name):
         with open(self.std_path+'/csvs/students.csv', 'r') as std_file:
-            readdata = csv.DictReader(std_file)
-
+            readdata = dict(csv.DictReader(std_file))
+            # print(dict(readdata))
             for eachdata in readdata:
                 if (readdata.get('std_name') != std_name):
                     with open(self.std_path+'/csvs/students.csv', 'w') as std_file:
