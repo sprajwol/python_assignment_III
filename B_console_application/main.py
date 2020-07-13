@@ -85,7 +85,36 @@ class Student:
             readdata = dict(csv.DictReader(std_file))
             # print(dict(readdata))
             for eachdata in readdata:
-                if (readdata.get('std_name') != std_name):
+                if (eachdata.get('std_name') == std_name):
+                    with open(self.std_path+'/csvs/students.csv', 'w') as std_file:
+                        print("Update Info")
+                        eachdata['std_name'] = input("Enter name to update:")
+                        eachdata['std_age'] = int(
+                            input("Enter age to update:"))
+
+                        Course.view_list_of_available_course(self)
+                        eachdata['std_course'] = input(
+                            "Enter a course name from above list to update:")
+
+                        print(
+                            "Do you want to pay the full deposit of 20000 or 2 installment of 10000(Select 1 or 2):")
+                        print("1. Full deposit")
+                        print("2. 2 Installment of 1000")
+                        entry = int(input())
+                        if (entry == 2):
+                            eachdata['std_deposit_status'] = "paid"
+                            eachdata['std_deposit_amount_remaining'] = 0
+                            eachdata['std_paid_amount'] = 20000
+
+                        elif (entry == 1):
+                            eachdata['std_deposit_status'] = "half installment left"
+                            eachdata['std_deposit_amount_remaining'] = 20000 - 10000
+                            eachdata['std_paid_amount'] = 10000
+
+                        writer = csv.DictWriter(
+                            std_file, fieldnames=self.std_field_names)
+                        writer.writerow(eachdata)
+                else:
                     with open(self.std_path+'/csvs/students.csv', 'w') as std_file:
                         writer = csv.DictWriter(
                             std_file, fieldnames=self.std_field_names)
